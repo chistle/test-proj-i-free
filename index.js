@@ -240,11 +240,20 @@ video.addEventListener("mouseleave", hideControls);
 videoControls.addEventListener("mouseenter", showControls);
 videoControls.addEventListener("mouseleave", hideControls);
 
-video.addEventListener("touchstart", function () {
+// Event listener для вывода управления плеером при касании
+video.addEventListener("touchend", function () {
   showControls();
   setTimeout(function () {
     hideControls();
   }, 1500);
+});
+
+// Event listener для скрытия управления плеером при бездействии курсора
+video.addEventListener("mousemove", function () {
+  showControls();
+  setTimeout(function () {
+    hideControls();
+  }, 2000);
 });
 
 let timer;

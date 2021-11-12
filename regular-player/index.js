@@ -240,6 +240,22 @@ video.addEventListener("mouseleave", hideControls);
 videoControls.addEventListener("mouseenter", showControls);
 videoControls.addEventListener("mouseleave", hideControls);
 
+// Event listener для вывода управления плеером при касании
+video.addEventListener("touchstart", function () {
+  showControls();
+  setTimeout(function () {
+    hideControls();
+  }, 1500);
+});
+
+// Event listener для скрытия управления плеером при бездействии курсора
+video.addEventListener("mousemove", function () {
+  showControls();
+  setTimeout(function () {
+    hideControls();
+  }, 2000);
+});
+
 let timer;
 let rewindSpeed = 0;
 let forwardSpeed = 0;
@@ -301,6 +317,26 @@ function doubleClickHandler(e) {
   const videoWidth = video.offsetWidth;
   e.offsetX < videoWidth / 2 ? rewindVideo() : forwardVideo();
 }
+
+// Хэндлер для touch устройств
+var tapped = false;
+video.addEventListener("touchstart", function (e) {
+  e.offsetX = e.touches[0].pageX - e.touches[0].target.offsetLeft;
+
+  if (!tapped) {
+    //if tap is not set, set up single tap
+    tapped = setTimeout(function () {
+      tapped = null;
+      togglePlay(e);
+    }, 300); //wait 300ms then run single click code
+  } else {
+    clearTimeout(tapped); //stop single tap callback
+    tapped = null;
+    doubleClickHandler(e);
+    //insert things you want to do when double tapped
+  }
+  e.preventDefault();
+});
 
 video.addEventListener("dblclick", doubleClickHandler);
 notifications.forEach(function (notification) {
